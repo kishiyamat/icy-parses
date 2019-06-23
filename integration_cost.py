@@ -684,11 +684,12 @@ def parse_sentence(sentence, verbose=False):
     global parser
     if verbose:
         print("Sentence:", sentence)
-    parser.stdin.write(sentence + "\n")
+    new_line = sentence + "\n"
+    parser.stdin.write(new_line.encode('utf-8'))
     parser.stdin.flush()
     output_parser = parser.stdout.readline()
     out = output_parser
-    while "####" not in out:
+    while b"####" not in out:
         out = parser.stdout.readline()
         output_parser += out
     return output_parser
@@ -708,7 +709,7 @@ def get_elements(dependency):
 
 
 def separate_parse(parse_output):
-    parts = parse_output.split("\n\n")
+    parts = parse_output.decode('utf-8').split("\n\n")
     if len(parts) > 2:
         part1 = parts[0].split("\n")
         pos_tags = part1[1]
